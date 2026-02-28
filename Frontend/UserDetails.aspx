@@ -39,29 +39,29 @@
         }
 
         /* --- THE ULTIMATE NAVBAR DESIGN --- */
-.navbar {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(20px);
-    padding: 10px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 3px solid #ff4d4d;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 15px 35px rgba(255, 77, 77, 0.1);
-}
+        .navbar {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #ff4d4d;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 15px 35px rgba(255, 77, 77, 0.1);
+        }
 
-.nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: #0f172a;
-    transition: 0.5s ease;
-}
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0f172a;
+            transition: 0.5s ease;
+        }
 
         /* MASSIVE LOGO ANIMATION */
         .nav-brand i {
@@ -508,3 +508,4 @@
 
 </body>
 </html>
+
