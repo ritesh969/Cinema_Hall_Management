@@ -38,6 +38,104 @@
             min-height: 100vh;
         }
 
+        /* --- THE ULTIMATE NAVBAR DESIGN --- */
+.navbar {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 10px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #ff4d4d;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 15px 35px rgba(255, 77, 77, 0.1);
+}
+
+.nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #0f172a;
+    transition: 0.5s ease;
+}
+
+        /* MASSIVE LOGO ANIMATION */
+        .nav-brand i {
+            color: #ff4d4d;
+            font-size: 2.8rem;
+            animation: rotateAndPulse 4s infinite ease-in-out;
+            filter: drop-shadow(0 0 10px rgba(255, 77, 77, 0.5));
+        }
+
+        @keyframes rotateAndPulse {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(15deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            perspective: 1000px; /* For 3D Hover */
+        }
+
+        .nav-links a {
+            position: relative;
+            color: #475569;
+            text-decoration: none;
+            padding: 15px 22px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+            overflow: hidden;
+        }
+
+        /* --- MASSIVE HOVER EFFECTS --- */
+        .nav-links a:hover {
+            color: #fff;
+            background: #ff4d4d;
+            transform: translateY(-10px) rotateX(10deg) scale(1.1);
+            box-shadow: 0 20px 40px rgba(255, 77, 77, 0.4);
+            border-color: #ff944d;
+        }
+
+        /* THE UNIQUE MARKER: ACTIVE STATE */
+        /* This styling applies when the page matches the link */
+        .nav-links a.active-link {
+            background: #0f172a;
+            color: white !important;
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .nav-links a.active-link::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 20%;
+            width: 60%;
+            height: 4px;
+            background: #ff4d4d;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ff4d4d;
+        }
+
+        /* TEXT BOUNCE ON HOVER */
+        .nav-links a:hover::before {
+            content: '➔';
+            position: absolute;
+            left: 5px;
+            opacity: 0.5;
+            animation: animate__backInLeft 0.3s;
+        }
+
         /* 2. MAIN GLASS CONTAINER */
         .glass-container {
             background: rgba(255, 255, 255, 0.8);
@@ -197,6 +295,23 @@
 </head>
 <body>
     <form id="formUltraSystem" runat="server">
+        <nav class="navbar animate__animated animate__fadeInDown">
+            <div class="nav-brand">
+                <i class="fas fa-ticket"></i>
+                <span>SMART <span style="color:#ff4d4d">CINEMA</span></span>
+            </div>
+            <div class="nav-links" id="mainNav">
+                <a href="Dashboard.aspx">Dashboard</a>
+                <a href="MovieDetails.aspx">Movies</a>
+                <a href="MovieTheaterOccupancy.aspx">Occupancy Report</a>
+                <a href="ShowtimesDetails.aspx">Showtimes</a>
+                <a href="TheaterCityHallDetails.aspx">Theater/Hall Details</a>
+                <a href="TheaterCityHallMovie.aspx">Theater-Movie Report</a>
+                <a href="TicketDetails.aspx">Tickets</a>
+                <a href="UserDetails.aspx">User Details</a>
+                <a href="UserTicket.aspx">User Ticket Report</a>
+            </div>
+        </nav>
         <div class="glass-container">
             
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -344,6 +459,32 @@
         </div>
     </form>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the current page filename
+            var path = window.location.pathname;
+            var page = path.split("/").pop();
+
+            // If page is empty (root), default to Dashboard
+            if (page === "" || page === "default.aspx") page = "Dashboard.aspx";
+
+            // Select all links inside the nav-links div
+            var navLinks = document.querySelectorAll('#mainNav a');
+
+            navLinks.forEach(function (link) {
+                // Get the href of the link (e.g., "Dashboard.aspx")
+                var linkHref = link.getAttribute('href');
+
+                // If the link matches the current page
+                if (linkHref === page) {
+                    link.classList.add('active-link');
+                    // Add a massive entrance animation just for the active link
+                    link.classList.add('animate__animated', 'animate__pulse');
+                }
+            });
+        });
+    </script>
+
     <script runat="server">
         // 1. Logic for the ADD NEW USER button
         protected void btnTriggerAdd_Load(object sender, EventArgs e) {
@@ -363,5 +504,7 @@
             }
         }
     </script>
+
+
 </body>
 </html>
