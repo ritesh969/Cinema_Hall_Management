@@ -25,6 +25,36 @@
             100% { background-position: 0% 50%; }
         }
 
+        @keyframes textGradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .command-title {
+            font-size: 5rem;
+            font-weight: 900;
+            margin: 0;
+            /* Luxury Tech Gradient */
+            background: linear-gradient(-45deg, #ff4d4d, #f472b6, #fb923c, #ec4899);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+    
+            /* This makes the color change continuously */
+            animation: textGradientFlow 3s ease infinite;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        /* 2. THE 3D HOVER EFFECT */
+        .command-title:hover {
+            transform: scale(1.1) rotateX(12deg) translateY(-10px);
+            filter: drop-shadow(0 20px 30px rgba(255, 77, 77, 0.3));
+            letter-spacing: 5px;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -286,9 +316,11 @@
             </div>
         </nav>
 
-        <header class="hero">
-            <h1 class="animate__animated animate__pulse animate__infinite">ELITE COMMAND</h1>
-            <p>High-Performance Cinema Administration</p>
+        <header class="hero" style="perspective: 1000px;">
+            <h1 class="command-title animate__animated animate__zoomIn">COMMAND CENTER</h1>
+            <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 0.9rem; color: #94a3b8; font-weight: 800; margin-top: 20px;">
+                <i class="fas fa-microchip" style="color: #ff4d4d;"></i> Cinema Management System // Control Interface
+            </p>
         </header>
 
         <div class="container">
