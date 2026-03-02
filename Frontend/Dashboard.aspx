@@ -317,7 +317,7 @@
         </nav>
 
         <header class="hero" style="perspective: 1000px;">
-            <h1 class="command-title animate__animated animate__zoomIn">COMMAND CENTER</h1>
+            <h1 class="command-title animate__animated animate__zoomIn">SYSTEM DASHBOARD</h1>
             <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 0.9rem; color: #94a3b8; font-weight: 800; margin-top: 20px;">
                 <i class="fas fa-microchip" style="color: #ff4d4d;"></i> Cinema Management System // Control Interface
             </p>
