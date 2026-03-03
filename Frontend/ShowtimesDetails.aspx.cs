@@ -4,10 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Oracle.ManagedDataAccess.Client;
+using System.Configuration;
 
 namespace WebApplication2.Frontend
 {
-    public partial class HallDetails : System.Web.UI.Page
+    public partial class ShowtimesDetails : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {

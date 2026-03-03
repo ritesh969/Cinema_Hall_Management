@@ -350,7 +350,7 @@
                  }
              });
          });
- </script>
+     </script>
 
     <script runat="server">
         protected void btnTriggerAdd_Load(object sender, EventArgs e) {
