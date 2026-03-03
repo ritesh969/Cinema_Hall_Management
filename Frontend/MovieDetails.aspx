@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MovieDetails.aspx.cs" Inherits="WebApplication2.Frontend.MovieDetails" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="MovieDetails.aspx.cs" Inherits="WebApplication2.Frontend.MovieDetails" UnobtrusiveValidationMode="None" %>
 <%@ Register assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" namespace="System.Web.UI.DataVisualization.Charting" tagprefix="asp" %>
 
 <!DOCTYPE html>
@@ -231,32 +231,44 @@
 <body>
     <form id="form1" runat="server">
         
-        <nav class="navbar animate__animated animate__fadeInDown">
-    <div class="nav-brand">
-        <i class="fas fa-ticket"></i>
-        <span>SMART <span style="color:#ff4d4d">CINEMA</span></span>
-    </div>
-    <div class="nav-links" id="mainNav">
-        <a href="Dashboard.aspx">Dashboard</a>
-        <a href="MovieDetails.aspx">Movies</a>
-        <a href="MovieTheaterOccupancy.aspx">Occupancy Report</a>
-        <a href="ShowtimesDetails.aspx">Showtimes</a>
-        <a href="TheaterCityHallDetails.aspx">Theater/Hall Details</a>
-        <a href="TheaterCityHallMovie.aspx">Theater-Movie Report</a>
-        <a href="TicketDetails.aspx">Tickets</a>
-        <a href="UserDetails.aspx">User Details</a>
-        <a href="UserTicket.aspx">User Ticket Report</a>
-    </div>
-</nav>
+       <nav class="navbar animate__animated animate__fadeInDown">
+            <div class="nav-brand"><i class="fas fa-ticket"></i><span>SMART <span style="color:#ff4d4d">CINEMA</span></span></div>
+            <div class="nav-links" id="mainNav">
+                <a href="Dashboard.aspx">Dashboard</a>
+                <a href="MovieDetails.aspx">Movies</a>
+                <a href="MovieTheaterOccupancy.aspx">Occupancy Report</a>
+                <a href="ShowtimesDetails.aspx">Showtimes</a>
+                <a href="TheaterCityHallDetails.aspx">Theater/Hall Details</a>
+                <a href="TheaterCityHallMovie.aspx">Theater-Movie Report</a>
+                <a href="TicketDetails.aspx">Tickets</a>
+                <a href="UserDetails.aspx">User Details</a>
+                <a href="UserTicket.aspx">User Ticket Report</a>
+            </div>
+        </nav>
 
-        <a href="Dashboard.aspx" class="btn-back animate__animated animate__fadeInLeft">
-            <i class="fas fa-circle-chevron-left"></i> EXIT TO DASHBOARD
-        </a>
+        <asp:Panel ID="pnlMovieException" runat="server" Visible="false"
+            Style="background:#fee2e2; padding:20px; border-radius:15px; margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <strong style="color:#b91c1c;">ERROR:</strong>
+                    <asp:Label ID="lblMovieExceptionMsg" runat="server" />
+                </div>
+                <asp:Button ID="btnCloseMovieError" runat="server" Text="OK"
+                    OnClick="btnCloseMovieError_Click"
+                    Style="background:#b91c1c; color:white; border:none; padding:8px 20px; border-radius:8px;" />
+            </div>
+        </asp:Panel>
+
+        <a href="Dashboard.aspx" class="btn-back animate__animated animate__fadeInLeft"><i class="fas fa-circle-chevron-left"></i> EXIT TO DASHBOARD</a>
 
         <div class="master-container">
-            
+            <!-- LEFT HUB: FORMVIEW -->
             <div class="left-hub">
-                <asp:FormView ID="FormView1" runat="server" DataKeyNames="MOVIEID" DataSourceID="SqlDataSource1" RenderOuterTable="false">
+                <asp:FormView ID="FormView1" runat="server" DataKeyNames="MOVIEID" DataSourceID="SqlDataSource1" RenderOuterTable="false"
+                    OnItemInserted="FormView1_ItemInserted"
+                    OnItemUpdated="FormView1_ItemUpdated"
+                    OnItemDeleted="FormView1_ItemDeleted">
+                    
                     <ItemTemplate>
                         <div class="section-title"><i class="fas fa-film" style="color:#ff4d4d;"></i> Movie Profile</div>
                         <div style="text-align:center;">
@@ -272,31 +284,57 @@
 
                     <EditItemTemplate>
                         <div class="section-title"><i class="fas fa-pen-nib" style="color:#d97706;"></i> Update Entry</div>
+    
                         <span class="label-text">Movie Title</span>
                         <asp:TextBox ID="MOVIETITLETextBox" runat="server" Text='<%# Bind("MOVIETITLE") %>' CssClass="input-massive" />
+                        <asp:RequiredFieldValidator ID="rfvMovieTitle" runat="server" ControlToValidate="MOVIETITLETextBox"
+                            ErrorMessage="Movie Title is required" ForeColor="Red" Display="Dynamic" />
+
                         <span class="label-text">Genre</span>
                         <asp:TextBox ID="GENRETextBox" runat="server" Text='<%# Bind("GENRE") %>' CssClass="input-massive" />
+                        <asp:RequiredFieldValidator ID="rfvGenre" runat="server" ControlToValidate="GENRETextBox"
+                            ErrorMessage="Genre is required" ForeColor="Red" Display="Dynamic" />
+
                         <span class="label-text">Duration (Mins)</span>
                         <asp:TextBox ID="DURATIONTextBox" runat="server" Text='<%# Bind("DURATION") %>' CssClass="input-massive" />
+                        <asp:RequiredFieldValidator ID="rfvDuration" runat="server" ControlToValidate="DURATIONTextBox"
+                            ErrorMessage="Duration is required" ForeColor="Red" Display="Dynamic" />
+
                         <asp:LinkButton ID="UpdateBtn" runat="server" CommandName="Update" CssClass="btn-action-massive">SAVE CHANGES</asp:LinkButton>
                         <asp:LinkButton ID="CancelBtn" runat="server" CommandName="Cancel" CssClass="btn-action-massive" style="background:#94a3b8; margin-top:10px;">CANCEL</asp:LinkButton>
                     </EditItemTemplate>
 
                     <InsertItemTemplate>
                         <div class="section-title"><i class="fas fa-folder-plus" style="color:#10b981;"></i> New Movie</div>
+    
                         <asp:TextBox ID="MOVIEIDTextBox" runat="server" Text='<%# Bind("MOVIEID") %>' CssClass="input-massive" placeholder="Movie ID" />
+                        <asp:RequiredFieldValidator ID="rfvMovieID" runat="server" ControlToValidate="MOVIEIDTextBox"
+                            ErrorMessage="Movie ID is required" ForeColor="Red" Display="Dynamic" />
+
                         <asp:TextBox ID="MOVIETITLETextBox" runat="server" Text='<%# Bind("MOVIETITLE") %>' CssClass="input-massive" placeholder="Title" />
+                        <asp:RequiredFieldValidator ID="rfvMovieTitleInsert" runat="server" ControlToValidate="MOVIETITLETextBox"
+                            ErrorMessage="Movie Title is required" ForeColor="Red" Display="Dynamic" />
+
                         <asp:TextBox ID="GENRETextBox" runat="server" Text='<%# Bind("GENRE") %>' CssClass="input-massive" placeholder="Genre" />
+                        <asp:RequiredFieldValidator ID="rfvGenreInsert" runat="server" ControlToValidate="GENRETextBox"
+                            ErrorMessage="Genre is required" ForeColor="Red" Display="Dynamic" />
+
                         <asp:TextBox ID="DURATIONTextBox" runat="server" Text='<%# Bind("DURATION") %>' CssClass="input-massive" placeholder="Duration" />
+                        <asp:RequiredFieldValidator ID="rfvDurationInsert" runat="server" ControlToValidate="DURATIONTextBox"
+                            ErrorMessage="Duration is required" ForeColor="Red" Display="Dynamic" />
+
                         <asp:LinkButton ID="InsertBtn" runat="server" CommandName="Insert" CssClass="btn-action-massive">CREATE NOW</asp:LinkButton>
                     </InsertItemTemplate>
                 </asp:FormView>
             </div>
 
+            <!-- RIGHT SCROLL: GRIDVIEW + CHART -->
             <div class="right-scroll">
                 <div class="table-card">
                     <div class="section-title"><i class="fas fa-database" style="color:#ff4d4d;"></i> Live Database Catalog</div>
-                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="MOVIEID" DataSourceID="SqlDataSource1" CssClass="gridview-elite" GridLines="None" OnSelectedIndexChanged="GridView1_SelectedIndexChanged">
+                    <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="MOVIEID"
+                        DataSourceID="SqlDataSource1" CssClass="gridview-elite" GridLines="None"
+                        OnSelectedIndexChanged="GridView1_SelectedIndexChanged">
                         <Columns>
                             <asp:BoundField DataField="MOVIEID" HeaderText="ID" ReadOnly="True" />
                             <asp:BoundField DataField="MOVIETITLE" HeaderText="TITLE" />
@@ -320,6 +358,7 @@
                 </div>
             </div>
 
+            <!-- SQL DATASOURCE -->
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
                 ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
                 ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>"
@@ -328,36 +367,145 @@
                 InsertCommand="INSERT INTO MOVIE (MOVIEID, MOVIETITLE, GENRE, DURATION) VALUES (:MOVIEID, :MOVIETITLE, :GENRE, :DURATION)"
                 UpdateCommand="UPDATE MOVIE SET MOVIETITLE = :MOVIETITLE, GENRE = :GENRE, DURATION = :DURATION WHERE MOVIEID = :MOVIEID">
                 <DeleteParameters><asp:Parameter Name="MOVIEID" Type="Decimal" /></DeleteParameters>
-                <UpdateParameters><asp:Parameter Name="MOVIETITLE" Type="String" /><asp:Parameter Name="GENRE" Type="String" /><asp:Parameter Name="DURATION" Type="Decimal" /><asp:Parameter Name="MOVIEID" Type="Decimal" /></UpdateParameters>
-                <InsertParameters><asp:Parameter Name="MOVIEID" Type="Decimal" /><asp:Parameter Name="MOVIETITLE" Type="String" /><asp:Parameter Name="GENRE" Type="String" /><asp:Parameter Name="DURATION" Type="Decimal" /></InsertParameters>
+                <UpdateParameters>
+                    <asp:Parameter Name="MOVIETITLE" Type="String" />
+                    <asp:Parameter Name="GENRE" Type="String" />
+                    <asp:Parameter Name="DURATION" Type="Decimal" />
+                    <asp:Parameter Name="MOVIEID" Type="Decimal" />
+                </UpdateParameters>
+                <InsertParameters>
+                    <asp:Parameter Name="MOVIEID" Type="Decimal" />
+                    <asp:Parameter Name="MOVIETITLE" Type="String" />
+                    <asp:Parameter Name="GENRE" Type="String" />
+                    <asp:Parameter Name="DURATION" Type="Decimal" />
+                </InsertParameters>
             </asp:SqlDataSource>
         </div>
-    </form>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Get the current page filename
-            var path = window.location.pathname;
-            var page = path.split("/").pop();
-
-            // If page is empty (root), default to Dashboard
-            if (page === "" || page === "default.aspx") page = "Dashboard.aspx";
-
-            // Select all links inside the nav-links div
-            var navLinks = document.querySelectorAll('#mainNav a');
-
-            navLinks.forEach(function (link) {
-                // Get the href of the link (e.g., "Dashboard.aspx")
-                var linkHref = link.getAttribute('href');
-
-                // If the link matches the current page
-                if (linkHref === page) {
-                    link.classList.add('active-link');
-                    // Add a massive entrance animation just for the active link
-                    link.classList.add('animate__animated', 'animate__pulse');
-                }
+        <!-- JAVASCRIPT FOR ACTIVE NAV LINK -->
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                var path = window.location.pathname;
+                var page = path.split("/").pop();
+                if (page === "" || page === "default.aspx") page = "Dashboard.aspx";
+                var navLinks = document.querySelectorAll('#mainNav a');
+                navLinks.forEach(function (link) {
+                    if (link.getAttribute('href') === page) {
+                        link.classList.add('active-link');
+                        link.classList.add('animate__animated', 'animate__pulse');
+                    }
+                });
             });
-        });
-    </script>
+        </script>
+
+        <!-- INLINE SERVER LOGIC -->
+        <script runat="server">
+            protected void Page_Load(object sender, EventArgs e)
+            {
+                if (!IsPostBack)
+                {
+                    GridView1.DataBind();
+                    FormView1.ChangeMode(FormViewMode.ReadOnly);
+                    FormView1.DataBind();
+                }
+            }
+
+            protected void FormView1_ItemInserted(object sender, FormViewInsertedEventArgs e)
+            {
+                if (e.Exception != null)
+                {
+                    pnlMovieException.Visible = true;
+                    lblMovieExceptionMsg.Text = "Insert failed: " + e.Exception.Message;
+                    e.ExceptionHandled = true;
+                }
+            }
+
+            protected void FormView1_ItemUpdated(object sender, FormViewUpdatedEventArgs e)
+            {
+                if (e.Exception != null)
+                {
+                    pnlMovieException.Visible = true;
+                    lblMovieExceptionMsg.Text = "Update failed: " + e.Exception.Message;
+                    e.ExceptionHandled = true;
+                }
+            }
+
+            protected void FormView1_ItemDeleted(object sender, FormViewDeletedEventArgs e)
+            {
+                if (e.Exception != null)
+                {
+                    pnlMovieException.Visible = true;
+                    lblMovieExceptionMsg.Text = "Delete failed: " + e.Exception.Message;
+                    e.ExceptionHandled = true;
+                }
+            }
+
+            protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
+            {
+                FormView1.PageIndex = GridView1.SelectedIndex;
+                FormView1.ChangeMode(FormViewMode.ReadOnly);
+                FormView1.DataBind();
+            }
+
+            protected void btnCloseMovieError_Click(object sender, EventArgs e)
+            {
+                pnlMovieException.Visible = false;
+            }
+
+            protected void FormView1_ItemInserting(object sender, FormViewInsertEventArgs e)
+{
+    if (!Page.IsValid)
+    {
+        pnlMovieException.Visible = true;
+        lblMovieExceptionMsg.Text = "Please fill all required fields before creating a movie.";
+        e.Cancel = true; // prevent insert
+        return;
+    }
+
+    // Optional: further validation
+    try { } 
+    catch (Exception ex)
+    {
+        pnlMovieException.Visible = true;
+        lblMovieExceptionMsg.Text = "Insert failed: " + ex.Message;
+        e.Cancel = true;
+    }
+}
+
+protected void FormView1_ItemUpdating(object sender, FormViewUpdateEventArgs e)
+{
+    if (!Page.IsValid)
+    {
+        pnlMovieException.Visible = true;
+        lblMovieExceptionMsg.Text = "Please fill all required fields before saving changes.";
+        e.Cancel = true; // prevent update
+        return;
+    }
+
+    try { } 
+    catch (Exception ex)
+    {
+        pnlMovieException.Visible = true;
+        lblMovieExceptionMsg.Text = "Update failed: " + ex.Message;
+        e.Cancel = true;
+    }
+}
+
+            protected void Application_Start(object sender, EventArgs e)
+{
+    ScriptManager.ScriptResourceMapping.AddDefinition(
+        "jquery",
+        new ScriptResourceDefinition
+        {
+            Path = "~/Scripts/jquery-3.6.0.min.js",         // local path
+            DebugPath = "~/Scripts/jquery-3.6.0.js",
+            CdnPath = "https://code.jquery.com/jquery-3.6.0.min.js",
+            CdnDebugPath = "https://code.jquery.com/jquery-3.6.0.js",
+            LoadSuccessExpression = "window.jQuery"
+        }
+    );
+}
+        </script>
+    </form>
 </body>
 </html>

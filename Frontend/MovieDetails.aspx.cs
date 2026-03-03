@@ -13,13 +13,5 @@ namespace WebApplication2.Frontend
         {
             // Page load logic
         }
-
-        // THIS IS THE METHOD THAT WAS MISSING
-        protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // Sync the FormView to the row selected in the GridView
-            FormView1.PageIndex = GridView1.SelectedIndex;
-            FormView1.DataBind();
-        }
     }
 }
