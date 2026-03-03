@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TicketDetails.aspx.cs" Inherits="WebApplication2.Backend.TicketDetails" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="TicketDetails.aspx.cs" Inherits="WebApplication2.Backend.TicketDetails" UnobtrusiveValidationMode="None" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 
 <!DOCTYPE html>
@@ -299,6 +299,24 @@
         </nav>
 
         <div class="glass-container">
+            <%-- EXCEPTION MESSAGE AREA --%>
+            <asp:Panel ID="pnlException" runat="server"
+                Visible="false"
+                Style="background:#fee2e2; padding:20px; border-radius:15px; margin-bottom:20px;">
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong style="color:#b91c1c;">ERROR:</strong>
+                        <asp:Label ID="lblExceptionMsg" runat="server" />
+                    </div>
+
+                    <asp:Button ID="btnCloseError"
+                        runat="server"
+                        Text="OK"
+                        OnClick="btnCloseError_Click"
+                        Style="background:#b91c1c; color:white; border:none; padding:8px 20px; border-radius:8px;" />
+                </div>
+            </asp:Panel>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="Dashboard.aspx" class="btn-universal btn-back-elite">
                     <i class="fas fa-chevron-left"></i> BACK TO PORTAL
@@ -337,7 +355,7 @@
             </asp:GridView>
 
             <div class="editor-wrapper">
-                <asp:FormView ID="fvTicketControl" runat="server" DataKeyNames="TICKETID" DataSourceID="sqlTicketData" Width="100%">
+                <asp:FormView ID="fvTicketControl" runat="server" DataKeyNames="TICKETID" DataSourceID="sqlTicketData" OnItemInserted="fvTicketControl_ItemInserted" OnItemUpdated="fvTicketControl_ItemUpdated" Width="100%">
                     <ItemTemplate>
                         <div style="text-align: center; color: #cbd5e1; padding: 40px; border: 2px dashed #f1f5f9; border-radius: 30px;">
                             <i class="fas fa-arrow-pointer fa-4x animate__animated animate__bounce animate__infinite"></i>
@@ -352,20 +370,47 @@
                             </h2>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
                                 <div>
-                                    <label style="font-weight:bold; color:#64748b">Ticket Number</label>
-                                    <asp:TextBox ID="TICKETNUMBERTextBox" runat="server" Text='<%# Bind("TICKETNUMBER") %>' CssClass="input-premium" />
+                                    <label>Ticket Number</label>
+                                    <asp:TextBox ID="TICKETNUMBERTextBox" runat="server"
+                                        Text='<%# Bind("TICKETNUMBER") %>'
+                                        CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="TICKETNUMBERTextBox"
+                                        ErrorMessage="Ticket Number is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
+
                                 <div>
-                                    <label style="font-weight:bold; color:#64748b">Issue Date</label>
-                                    <asp:TextBox ID="ISSUEDATETextBox" runat="server" Text='<%# Bind("ISSUEDATE") %>' CssClass="input-premium" />
+                                    <label>Issue Date</label>
+                                    <asp:TextBox ID="ISSUEDATETextBox" runat="server"
+                                        Text='<%# Bind("ISSUEDATE","{0:yyyy-MM-dd}") %>'
+                                        TextMode="Date"
+                                        CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="ISSUEDATETextBox"
+                                        ErrorMessage="Issue Date is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
+
                                 <div>
-                                    <label style="font-weight:bold; color:#64748b">Status</label>
-                                    <asp:TextBox ID="TICKETSTATUSTextBox" runat="server" Text='<%# Bind("TICKETSTATUS") %>' CssClass="input-premium" />
+                                    <label>Status</label>
+                                    <asp:TextBox ID="TICKETSTATUSTextBox" runat="server"
+                                        Text='<%# Bind("TICKETSTATUS") %>'
+                                        CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="TICKETSTATUSTextBox"
+                                        ErrorMessage="Status is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                             </div>
                             <div style="margin-top: 40px; display: flex; gap: 20px;">
-                                <asp:LinkButton ID="UpdateButton" runat="server" CommandName="Update" CssClass="btn-save-master">
+                                <asp:LinkButton ID="UpdateButton" runat="server" CommandName="Update" CausesValidation="true" CssClass="btn-save-master">
                                     <i class="fas fa-cloud-arrow-up"></i> SAVE TICKET
                                 </asp:LinkButton>
                                 <asp:LinkButton ID="UpdateCancelButton" runat="server" CommandName="Cancel" CssClass="btn-universal btn-back-elite" Text="DISCARD" />
@@ -379,13 +424,56 @@
                                 <i class="fas fa-receipt"></i> GENERATE NEW TICKET
                             </h2>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                                <asp:TextBox ID="TICKETIDTextBox" runat="server" Text='<%# Bind("TICKETID") %>' placeholder="Assign ID" CssClass="input-premium" />
-                                <asp:TextBox ID="TICKETNUMBERTextBox" runat="server" Text='<%# Bind("TICKETNUMBER") %>' placeholder="Serial Number" CssClass="input-premium" />
-                                <asp:TextBox ID="ISSUEDATETextBox" runat="server" Text='<%# Bind("ISSUEDATE") %>' placeholder="Date (YYYY-MM-DD)" CssClass="input-premium" />
-                                <asp:TextBox ID="TICKETSTATUSTextBox" runat="server" Text='<%# Bind("TICKETSTATUS") %>' placeholder="Status (Active)" CssClass="input-premium" />
+
+                                <div>
+                                    <asp:TextBox ID="TICKETIDTextBox" runat="server"
+                                        Text='<%# Bind("TICKETID") %>'
+                                        placeholder="Assign ID"
+                                        CssClass="input-premium" />
+                                </div>
+
+                                <div>
+                                    <asp:TextBox ID="TICKETNUMBERTextBox" runat="server"
+                                        Text='<%# Bind("TICKETNUMBER") %>'
+                                        placeholder="Serial Number"
+                                        CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="TICKETNUMBERTextBox"
+                                        ErrorMessage="Ticket Number is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
+                                </div>
+
+                                <div>
+                                    <asp:TextBox ID="ISSUEDATETextBox" runat="server"
+                                        Text='<%# Bind("ISSUEDATE","{0:yyyy-MM-dd}") %>'
+                                        TextMode="Date"
+                                        CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="ISSUEDATETextBox"
+                                        ErrorMessage="Issue Date is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
+                                </div>
+
+                                <div>
+                                    <asp:TextBox ID="TICKETSTATUSTextBox" runat="server"
+                                        Text='<%# Bind("TICKETSTATUS") %>'
+                                        placeholder="Status (Active)"
+                                        CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="TICKETSTATUSTextBox"
+                                        ErrorMessage="Status is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
+                                </div>
+
                             </div>
                             <div style="margin-top: 40px; display: flex; gap: 20px;">
-                                <asp:LinkButton ID="InsertButton" runat="server" CommandName="Insert" CssClass="btn-save-master" style="background:#f5576c;">
+                                <asp:LinkButton ID="InsertButton" runat="server" CommandName="Insert" CausesValidation="true" CssClass="btn-save-master" style="background:#f5576c;">
                                     <i class="fas fa-check-double"></i> CONFIRM TICKET
                                 </asp:LinkButton>
                                 <asp:LinkButton ID="InsertCancelButton" runat="server" CommandName="Cancel" CssClass="btn-universal btn-back-elite" Text="CANCEL" />
@@ -407,7 +495,8 @@
                 </asp:Chart>
             </div>
 
-            <asp:SqlDataSource ID="sqlTicketData" runat="server" 
+            <asp:SqlDataSource ID="sqlTicketData" runat="server"
+                
                 ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
                 ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>"
                 SelectCommand="SELECT * FROM &quot;TICKET&quot;"
@@ -458,6 +547,33 @@
                 fvTicketControl.ChangeMode(FormViewMode.Edit);
             }
         }
+
+        // --- EXCEPTION HANDLING LOGIC ---
+        
+        protected void fvTicketControl_ItemInserted(object sender, FormViewInsertedEventArgs e) {
+            if (e.Exception != null) {
+                pnlException.Visible = true;
+                lblExceptionMsg.Text = "Could not save: " + e.Exception.Message;
+                e.ExceptionHandled = true; // Stops the crash
+                e.KeepInInsertMode = true; // Keeps data in textboxes so user doesn't lose work
+            }
+        }
+
+        protected void fvTicketControl_ItemUpdated(object sender, FormViewUpdatedEventArgs e) {
+            if (e.Exception != null) {
+                pnlException.Visible = true;
+                lblExceptionMsg.Text = "Update failed: " + e.Exception.Message;
+                e.ExceptionHandled = true;
+                e.KeepInEditMode = true;
+            }
+        }
+
+        
+
+        protected void btnCloseError_Click(object sender, EventArgs e)
+            {
+                pnlException.Visible = false;
+            }
     </script>
 </body>
 </html>
