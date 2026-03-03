@@ -192,7 +192,15 @@
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
                 ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
                 ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" 
-                SelectCommand="SELECT TH.TheaterName, TH.TheaterAddress, H.HallName, H.Capacity, M.MovieTitle, S.ShowDate, S.StartTime, S.EndTime FROM Theater TH JOIN Booking B ON TH.TheaterID = B.TheaterID JOIN Hall H ON B.HallID = H.HallID JOIN Movie M ON B.MovieID = M.MovieID JOIN ShowTable S ON B.ShowID = S.ShowID ORDER BY TH.TheaterName">
+                SelectCommand="
+                SELECT 
+                    TH.TheaterName, TH.TheaterAddress, H.HallName, H.Capacity, M.MovieTitle, S.ShowDate, S.StartTime, S.EndTime 
+                FROM Theater TH 
+                JOIN Booking B ON TH.TheaterID = B.TheaterID 
+                JOIN Hall H ON B.HallID = H.HallID 
+                JOIN Movie M ON B.MovieID = M.MovieID 
+                JOIN ShowTable S ON B.ShowID = S.ShowID 
+                ORDER BY TH.TheaterName">
             </asp:SqlDataSource>
         </div>
     </form>

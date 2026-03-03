@@ -238,7 +238,15 @@
 
             <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" 
                 ProviderName="<%$ ConnectionStrings:ConnectionString.ProviderName %>" 
-                SelectCommand="SELECT M.MovieTitle, TH.TheaterName, TH.TheaterAddress, H.HallName, H.Capacity, COUNT(T.TicketID) AS PaidSeats, ROUND((COUNT(T.TicketID) * 100) / H.Capacity, 2) AS OccupancyPercentage FROM Movie M, Booking B, Theater TH, Hall H, BookingSeat BS, Seat S, Ticket T, Payment P WHERE M.MovieID = B.MovieID AND TH.TheaterID = B.TheaterID AND H.HallID = B.HallID AND BS.BookingID = B.BookingID AND S.SeatID = BS.SeatID AND T.TicketID = S.TicketID AND P.PaymentID = B.PaymentID AND P.PaymentStatus = 'Paid' GROUP BY M.MovieTitle, TH.TheaterName, TH.TheaterAddress, H.HallName, H.Capacity ORDER BY OccupancyPercentage DESC">
+                SelectCommand="SELECT 
+                M.MovieTitle, TH.TheaterName, TH.TheaterAddress, H.HallName, H.Capacity, COUNT(T.TicketID) AS PaidSeats, 
+                ROUND((COUNT(T.TicketID) * 100) / H.Capacity, 2) AS OccupancyPercentage 
+                FROM Movie M, Booking B, Theater TH, Hall H, BookingSeat BS, Seat S, Ticket T, Payment P 
+                WHERE M.MovieID = B.MovieID AND TH.TheaterID = B.TheaterID AND H.HallID = B.HallID 
+                AND BS.BookingID = B.BookingID AND S.SeatID = BS.SeatID AND T.TicketID = S.TicketID 
+                AND P.PaymentID = B.PaymentID AND P.PaymentStatus = 'Paid' 
+                GROUP BY M.MovieTitle, TH.TheaterName, TH.TheaterAddress, H.HallName, H.Capacity 
+                ORDER BY OccupancyPercentage DESC">
             </asp:SqlDataSource>
         </div>
     </form>
