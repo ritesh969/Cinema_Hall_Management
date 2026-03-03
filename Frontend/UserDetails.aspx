@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UserDetails.aspx.cs" Inherits="WebApplication2.Backend.UserDetails" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="UserDetails.aspx.cs" Inherits="WebApplication2.Backend.UserDetails" UnobtrusiveValidationMode="None" %>
 <%@ Register Assembly="System.Web.DataVisualization, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" Namespace="System.Web.UI.DataVisualization.Charting" TagPrefix="asp" %>
 
 <!DOCTYPE html>
@@ -313,6 +313,24 @@
             </div>
         </nav>
         <div class="glass-container">
+            <%-- 🔴 EXCEPTION MESSAGE AREA --%>
+            <asp:Panel ID="pnlException" runat="server"
+                Visible="false"
+                Style="background:#fee2e2; padding:20px; border-radius:15px; margin-bottom:20px;">
+
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong style="color:#b91c1c;">ERROR:</strong>
+                        <asp:Label ID="lblExceptionMsg" runat="server" />
+                    </div>
+
+                    <asp:Button ID="btnCloseError"
+                        runat="server"
+                        Text="OK"
+                        OnClick="btnCloseError_Click"
+                        Style="background:#b91c1c; color:white; border:none; padding:8px 20px; border-radius:8px;" />
+                </div>
+            </asp:Panel>
             
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <a href="Dashboard.aspx" class="btn-universal btn-back-elite">
@@ -352,7 +370,7 @@
             </asp:GridView>
 
             <div class="editor-wrapper">
-                <asp:FormView ID="fvUserInterface" runat="server" DataKeyNames="USERID" DataSourceID="sqlCoreSource" Width="100%">
+                <asp:FormView ID="fvUserInterface" runat="server" DataKeyNames="USERID" DataSourceID="sqlCoreSource" OnItemInserted="fvUserInterface_ItemInserted" OnItemUpdated="fvUserInterface_ItemUpdated" OnItemUpdating="fvUserInterface_ItemUpdating" Width="100%">
                     <ItemTemplate>
                         <div style="text-align: center; color: #cbd5e1; padding: 40px; border: 2px dashed #f1f5f9; border-radius: 30px;">
                             <i class="fas fa-arrow-pointer fa-4x animate__animated animate__bounce animate__infinite"></i>
@@ -373,18 +391,36 @@
                                 <div>
                                     <label style="font-weight:bold; color:#64748b">Username</label>
                                     <asp:TextBox ID="USERNAMETextBox" runat="server" Text='<%# Bind("USERNAME") %>' CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="USERNAMETextBox"
+                                        ErrorMessage="Username is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                                 <div>
                                     <label style="font-weight:bold; color:#64748b">Email Address</label>
-                                    <asp:TextBox ID="EMAILTextBox" runat="server" Text='<%# Bind("EMAIL") %>' CssClass="input-premium" />
+                                    <asp:TextBox ID="EMAILTextBox" runat="server" TextMode="Email" Text='<%# Bind("EMAIL") %>' CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="EMAILTextBox"
+                                        ErrorMessage="Email is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                                 <div>
                                     <label style="font-weight:bold; color:#64748b">Physical Address</label>
                                     <asp:TextBox ID="ADDRESSTextBox" runat="server" Text='<%# Bind("ADDRESS") %>' CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="ADDRESSTextBox"
+                                        ErrorMessage="Address is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                             </div>
                             <div style="margin-top: 40px; display: flex; gap: 20px;">
-                                <asp:LinkButton ID="UpdateButton" runat="server" CommandName="Update" CssClass="btn-save-master">
+                                <asp:LinkButton ID="UpdateButton" runat="server" CommandName="Update" CausesValidation="true" CssClass="btn-save-master">
                                     <i class="fas fa-cloud-arrow-up"></i> SAVE CHANGES
                                 </asp:LinkButton>
                                 <asp:LinkButton ID="UpdateCancelButton" runat="server" CommandName="Cancel" CssClass="btn-universal btn-back-elite" Text="DISCARD" />
@@ -405,18 +441,36 @@
                                 <div>
                                     <label style="font-weight:bold; color:#64748b">Full Name</label>
                                     <asp:TextBox ID="USERNAMETextBox" runat="server" Text='<%# Bind("USERNAME") %>' CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="USERNAMETextBox"
+                                        ErrorMessage="Username is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                                 <div>
                                     <label style="font-weight:bold; color:#64748b">Email</label>
-                                    <asp:TextBox ID="EMAILTextBox" runat="server" Text='<%# Bind("EMAIL") %>' CssClass="input-premium" />
+                                    <asp:TextBox ID="EMAILTextBox" runat="server" TextMode="Email" Text='<%# Bind("EMAIL") %>' CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="EMAILTextBox"
+                                        ErrorMessage="Email is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                                 <div>
                                     <label style="font-weight:bold; color:#64748b">Current Address</label>
                                     <asp:TextBox ID="ADDRESSTextBox" runat="server" Text='<%# Bind("ADDRESS") %>' CssClass="input-premium" />
+                                    <asp:RequiredFieldValidator
+                                        ControlToValidate="ADDRESSTextBox"
+                                        ErrorMessage="Address is required"
+                                        ForeColor="Red"
+                                        Display="Dynamic"
+                                        runat="server" />
                                 </div>
                             </div>
                             <div style="margin-top: 40px; display: flex; gap: 20px;">
-                                <asp:LinkButton ID="InsertButton" runat="server" CommandName="Insert" CssClass="btn-save-master" style="background:#f5576c;">
+                                <asp:LinkButton ID="InsertButton" runat="server" CommandName="Insert" CausesValidation="true" CssClass="btn-save-master" style="background:#f5576c;">
                                     <i class="fas fa-check-double"></i> COMMIT TO DATABASE
                                 </asp:LinkButton>
                                 <asp:LinkButton ID="InsertCancelButton" runat="server" CommandName="Cancel" CssClass="btn-universal btn-back-elite" Text="CANCEL" />
@@ -502,6 +556,52 @@
                 fvUserInterface.PageIndex = index;
                 fvUserInterface.ChangeMode(FormViewMode.Edit);
             }
+        }
+
+        // 🔴 INSERT EXCEPTION
+        protected void fvUserInterface_ItemInserted(object sender, FormViewInsertedEventArgs e)
+        {
+            if (e.Exception != null)
+            {
+                pnlException.Visible = true;
+                lblExceptionMsg.Text = "Could not save user: " + e.Exception.Message;
+                e.ExceptionHandled = true;
+                e.KeepInInsertMode = true;
+            }
+        }
+
+        // 🔴 UPDATE EXCEPTION
+        protected void fvUserInterface_ItemUpdated(object sender, FormViewUpdatedEventArgs e)
+        {
+            if (e.Exception != null)
+            {
+                pnlException.Visible = true;
+                lblExceptionMsg.Text = "Update failed: " + e.Exception.Message;
+                e.ExceptionHandled = true;
+                e.KeepInEditMode = true;
+            }
+        }
+
+        protected void fvUserInterface_ItemUpdating(object sender, FormViewUpdateEventArgs e)
+        {
+            string username = e.NewValues["USERNAME"]?.ToString();
+            string email = e.NewValues["EMAIL"]?.ToString();
+            string address = e.NewValues["ADDRESS"]?.ToString();
+
+            if (string.IsNullOrWhiteSpace(username) ||
+                string.IsNullOrWhiteSpace(email) ||
+                string.IsNullOrWhiteSpace(address))
+            {
+                pnlException.Visible = true;
+                lblExceptionMsg.Text = "All fields are required. Update cancelled.";
+                e.Cancel = true;  // ❌ Prevent update
+            }
+        }
+
+        // 🔴 CLOSE ERROR PANEL
+        protected void btnCloseError_Click(object sender, EventArgs e)
+        {
+            pnlException.Visible = false;
         }
     </script>
 

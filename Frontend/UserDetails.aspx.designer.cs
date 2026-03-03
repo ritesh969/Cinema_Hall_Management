@@ -24,6 +24,33 @@ namespace WebApplication2.Backend
         protected global::System.Web.UI.HtmlControls.HtmlForm formUltraSystem;
 
         /// <summary>
+        /// pnlException control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlException;
+
+        /// <summary>
+        /// lblExceptionMsg control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblExceptionMsg;
+
+        /// <summary>
+        /// btnCloseError control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnCloseError;
+
+        /// <summary>
         /// btnTriggerAdd control.
         /// </summary>
         /// <remarks>
